@@ -1,31 +1,24 @@
-version: '3.8'
-
 services:
   mysql-dev:
-    image: mysql:8.0
+    image: mariadb:10.11
     container_name: adotepet-mysql-dev
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: adotepet_dev
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_dev_data:/var/lib/mysql
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - adotepet-network
 
   mysql-hml:
-    image: mysql:8.0
+    image: mariadb:10.11
     container_name: adotepet-mysql-hml
     environment:
       MYSQL_ROOT_PASSWORD: homolog
       MYSQL_DATABASE: adotepet_hml
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
-      - mysql_hml_data:/var/lib/mysql
-    networks:
       - mysql_hml_data:/var/lib/mysql
 
   backend:
@@ -34,7 +27,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROGILES_ACTIVE: dev
+      SPRING_PROFILES_ACTIVE: dev
       DB_URL: jdbc:mysql://mysql-dev:3306/adotepet_dev
       DB_USERNAME: root
       DB_PASSWORD: root
@@ -43,14 +36,8 @@ services:
       - ./logs:/app/logs
     depends_on:
       - mysql-dev
-    networks:
-      - adotepet-network
     restart: unless-stopped
 
 volumes:
   mysql_dev_data:
   mysql_hml_data:
-
-networks:
-  adotepet-network:
-    driver: bridge

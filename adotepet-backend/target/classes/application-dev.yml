@@ -1,10 +1,12 @@
+# src/main/resources/application-dev.yml
+---
 spring:
   config:
     activate:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://localhost:3306/adotepet_dev?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3311/adotepet_dev?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,7 +21,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        format_sql: true.
+        format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
         jdbc:
           batch_size: 20
@@ -36,16 +38,30 @@ spring:
     livereload:
       enabled: true
 
+server:
+  port: 8081  # ← CORREÇÃO AQUI: PORTA 8081
+  servlet:
+    context-path: /api
+
 # Configurações específicas do ambiente dev
 app:
   environment: "Desenvolvimento"
   debug: true
+  cors:
+    allowed-origins: "http://localhost:3000"
   security:
     jwt:
       secret: "dev-secret-key-12345-change-this-in-production"
+      expiration: 86400000
+  upload:
+    directory: "./uploads"
 
 logging:
   level:
+    com.adotepet: DEBUG
+    org.springframework.security: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
     org.springframework.transaction: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

@@ -1,0 +1,29 @@
+Spring:
+  application:
+    name: AdotePetOnline
+  profiles:
+    active: dev # Ambiente padrão para desenvolvimento
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Configurações comuns a todos os ambientes
+app:
+  name: AdotePet Online
+  version: 1.0.0
+  cors:
+    allowed-origins: "http://localhost:3000"
+  security:
+    jwt:
+      secret: "adotepet-secret-key-dev-change-in-production"
+      expiration: 86400000  # 24 horas em milissegundos
+  upload:
+    directory: "./upload"
+    max-file-size:  10MB
+
+logging:
+  level:
+    com.adotepet: DEBUG
+    org.springframework.security: DEBUG

@@ -1,0 +1,50 @@
+# src/main/resources/application-hml.yml
+---
+spring:
+  config:
+    activate:
+      on-profile: hml
+
+  datasource:
+    url: ${DB_URL_HML:jdbc:mysql://localhost:3306/adotepet_hml?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME_HML:homolog}
+    password: ${DB_PASSWORD_HML}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Não altera schema, apenas valida
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          batch_size: 30
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+# Configurações específicas do ambiente hml
+app:
+  environment: "Homologação"
+  debug: false
+  cors:
+    allowed-origins: ${CORS_ORIGINS_HML:"https://homolog.adotepet.com.br"}
+  security:
+    jwt:
+      secret: ${JWT_SECRET_HML}
+
+logging:
+  level:
+    com.adotepet: INFO
+    org.springframework: INFO
+  file:
+    name: ./logs/adotepet-hml.log
+    max-size: 10MB
+    max-history: 30
